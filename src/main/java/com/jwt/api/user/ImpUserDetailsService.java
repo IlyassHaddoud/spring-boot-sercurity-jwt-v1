@@ -19,6 +19,7 @@ public class ImpUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.getUserByEmail(username);
+        if(user == null) throw new UsernameNotFoundException("Invalid username or password");
         List<String> roles = new ArrayList<>();
         roles.add("USER");
         return org.springframework.security.core.userdetails.User.builder()
