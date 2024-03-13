@@ -21,5 +21,4 @@ public class UserController {
         return this.userService.getUsers();
     }
 
-
 }
