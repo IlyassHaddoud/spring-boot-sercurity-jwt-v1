@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,11 @@ public class UserService {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
             User authenticatedUser = this.userRepository.getUserByEmail(email);
-            String token = this.jwtUtil.createToken(authenticatedUser);
+            List<String> roles = new ArrayList<>();
+            this.getUserById(authenticatedUser.getId()).getRoles().forEach(role -> {
+                roles.add(role.getAuthority());
+            });
+            String token = this.jwtUtil.createToken(authenticatedUser,roles);
             return ResponseEntity.ok().body(token);
         }catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid username or password");

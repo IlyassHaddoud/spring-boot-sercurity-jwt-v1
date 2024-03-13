@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -43,11 +43,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            Claims claims = jwtUtil.resolveClaims(request);
 
+            Claims claims = jwtUtil.resolveClaims(request);
             if(claims != null & jwtUtil.validateClaims(claims)){
                 String email = claims.getSubject();
-                Authentication authentication = new UsernamePasswordAuthenticationToken(email,"", AuthorityUtils.createAuthorityList("ROLE_USER","ROLE_ADMIN"));
+                List<String> roles = (List<String>) claims.get("roles");
+                Authentication authentication = new UsernamePasswordAuthenticationToken(email,"", AuthorityUtils.createAuthorityList(roles));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
