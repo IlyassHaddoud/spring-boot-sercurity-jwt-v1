@@ -1,8 +1,9 @@
 package com.jwt.api.user;
 
-import com.jwt.api.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,13 @@ public class UserController {
     {
         String username = (String) authentication.getPrincipal();
         return ResponseEntity.ok().body("Hello "+username+", Welcome to the VIP [room💎💵], you have "+authentication.getAuthorities()+" powers💪🔥");
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<String> adminPage()
+    {
+        return ResponseEntity.ok().body("you are in admin page 🔐");
     }
 
     @GetMapping("/{user_id}/roles/{role_id}")
