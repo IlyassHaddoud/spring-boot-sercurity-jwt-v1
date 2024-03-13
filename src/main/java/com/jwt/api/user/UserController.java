@@ -34,10 +34,17 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> adminPage()
     {
         return ResponseEntity.ok().body("you are in admin page 🔐");
+    }
+
+    @GetMapping("/public")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN') or hasAuthority('SUPPLIER')")
+    public ResponseEntity<String> publicPage()
+    {
+        return ResponseEntity.ok().body("you are in the public page 🚦🚗");
     }
 
     @GetMapping("/{user_id}/roles/{role_id}")
