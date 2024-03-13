@@ -1,6 +1,10 @@
 package com.jwt.api.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.jwt.api.role.Role;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class User{
@@ -14,6 +18,14 @@ public class User{
     private String email;
 
     private String password;
+
+    @ManyToMany
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @JsonIgnoreProperties("users")
+    private List<Role> roles;
 
     public Integer getId() {
         return id;
@@ -45,5 +57,13 @@ public class User{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
