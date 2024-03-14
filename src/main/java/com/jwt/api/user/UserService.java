@@ -53,8 +53,10 @@ public class UserService {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
             User authenticatedUser = this.userRepository.getUserByEmail(email);
             List<String> roles = new ArrayList<>();
-            this.getUserById(authenticatedUser.getId()).getRoles().forEach(role -> {
-                roles.add(role.getAuthority());
+            this.getUserById(authenticatedUser.getId())
+                    .getRoles()
+                    .forEach(role -> {
+                        roles.add(role.getAuthority());
             });
             String token = this.jwtUtil.createToken(authenticatedUser,roles);
             return ResponseEntity.ok().body(token);
