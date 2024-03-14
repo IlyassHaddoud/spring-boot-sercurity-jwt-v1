@@ -26,27 +26,6 @@ public class UserController {
         return this.userService.getUsers();
     }
 
-    @GetMapping("/msg")
-    public ResponseEntity<String> Home(Authentication authentication)
-    {
-        String username = (String) authentication.getPrincipal();
-        return ResponseEntity.ok().body("Hello "+username+", Welcome to the VIP [room💎💵], you have "+authentication.getAuthorities()+" powers💪🔥");
-    }
-
-    @GetMapping("/admin")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> adminPage()
-    {
-        return ResponseEntity.ok().body("you are in admin page 🔐");
-    }
-
-    @GetMapping("/public")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN') or hasAuthority('SUPPLIER')")
-    public ResponseEntity<String> publicPage()
-    {
-        return ResponseEntity.ok().body("you are in the public page 🚦🚗");
-    }
-
     @GetMapping("/{user_id}/roles/{role_id}")
     public User addRoleToUser(@PathVariable Integer user_id,@PathVariable Integer role_id)
     {
